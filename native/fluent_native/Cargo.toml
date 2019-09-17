@@ -1,0 +1,16 @@
+[package]
+name = "fluent_native"
+version = "0.1.0"
+authors = []
+edition = "2018"
+
+[lib]
+name = "fluent_native"
+path = "src/lib.rs"
+crate-type = ["dylib"]
+
+[dependencies]
+rustler = "0.21.0"
+lazy_static = "1.0"
+fluent = "0.7.1"
+unic-langid = "0.4.1"
