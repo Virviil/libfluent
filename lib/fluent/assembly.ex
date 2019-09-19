@@ -27,11 +27,11 @@ defmodule Fluent.Assembly do
     do: raise(ArgumentError, "put_locale/1 only accepts binary locales, got: #{inspect(locale)}")
 
   @doc """
-  Gets the locale for the current process and the given backend.
+  Gets the locale for the current process and the given assembly.
   This function returns the value of the locale for the current process and the
   given `assembly`. If there is no locale for the current process and the given
   assembly, then either the global Fluent locale (if set), or the default locale
-  for the given backend, or the global default locale is returned. See the
+  for the given assembly, or the global default locale is returned. See the
   "Locale" section in the module documentation for more information.
   ## Examples
       Fluent.get_locale(MyApp.Fluent)
@@ -39,7 +39,7 @@ defmodule Fluent.Assembly do
   """
   @spec get_locale(assembly) :: locale
   def get_locale(assembly) do
-    Process.get(assembly) || Process.get(Fluent.Assembly) || assembly.__gettext__(:default_locale)
+    Process.get(assembly) || Process.get(Fluent.Assembly) || assembly.__fluent__(:default_locale)
   end
 
   @doc """
@@ -59,95 +59,95 @@ defmodule Fluent.Assembly do
     do: raise(ArgumentError, "put_locale/2 only accepts binary locales, got: #{inspect(locale)}")
 
   @doc """
-  Runs `fun` with the global Gettext locale set to `locale`.
-  This function just sets the global Gettext locale to `locale` before running
+  Runs `fun` with the global Fluent.Assembly locale set to `locale`.
+  This function just sets the global Fluent.Assembly locale to `locale` before running
   `fun` and sets it back to its previous value afterwards. Note that
   `put_locale/2` is used to set the locale, which is thus set only for the
   current process (keep this in mind if you plan on spawning processes inside
   `fun`).
   The value returned by this function is the return value of `fun`.
   ## Examples
-      Gettext.put_locale("fr")
-      MyApp.Gettext.gettext("Hello world")
+      Fluent.Assembly.put_locale("fr")
+      MyApp.Fluent.Assembly.Fluent.Assembly("Hello world")
       #=> "Bonjour monde"
-      Gettext.with_locale "it", fn ->
-        MyApp.Gettext.gettext("Hello world")
+      Fluent.Assembly.with_locale "it", fn ->
+        MyApp.Fluent.Assembly.Fluent.Assembly("Hello world")
       end
       #=> "Ciao mondo"
-      MyApp.Gettext.gettext("Hello world")
+      MyApp.Fluent.Assembly.Fluent.Assembly("Hello world")
       #=> "Bonjour monde"
   """
   @spec with_locale(locale, (() -> result)) :: result when result: var
   def with_locale(locale, fun) do
-    previous_locale = Process.get(Gettext)
-    Gettext.put_locale(locale)
+    previous_locale = Process.get(Fluent.Assembly)
+    Fluent.Assembly.put_locale(locale)
 
     try do
       fun.()
     after
       if previous_locale do
-        Gettext.put_locale(previous_locale)
+        Fluent.Assembly.put_locale(previous_locale)
       else
-        Process.delete(Gettext)
+        Process.delete(Fluent.Assembly)
       end
     end
   end
 
   @doc """
-  Runs `fun` with the gettext locale set to `locale` for the given `backend`.
-  This function just sets the Gettext locale for `backend` to `locale` before
+  Runs `fun` with the Fluent.Assembly locale set to `locale` for the given `assembly`.
+  This function just sets the Fluent.Assembly locale for `assembly` to `locale` before
   running `fun` and sets it back to its previous value afterwards. Note that
   `put_locale/2` is used to set the locale, which is thus set only for the
   current process (keep this in mind if you plan on spawning processes inside
   `fun`).
   The value returned by this function is the return value of `fun`.
   ## Examples
-      Gettext.put_locale(MyApp.Gettext, "fr")
-      MyApp.Gettext.gettext("Hello world")
+      Fluent.Assembly.put_locale(MyApp.Fluent.Assembly, "fr")
+      MyApp.Fluent.Assembly.Fluent.Assembly("Hello world")
       #=> "Bonjour monde"
-      Gettext.with_locale MyApp.Gettext, "it", fn ->
-        MyApp.Gettext.gettext("Hello world")
+      Fluent.Assembly.with_locale MyApp.Fluent.Assembly, "it", fn ->
+        MyApp.Fluent.Assembly.Fluent.Assembly("Hello world")
       end
       #=> "Ciao mondo"
-      MyApp.Gettext.gettext("Hello world")
+      MyApp.Fluent.Assembly.Fluent.Assembly("Hello world")
       #=> "Bonjour monde"
   """
-  @spec with_locale(backend, locale, (() -> result)) :: result when result: var
-  def with_locale(backend, locale, fun) do
-    previous_locale = Process.get(backend)
-    Gettext.put_locale(backend, locale)
+  @spec with_locale(assembly, locale, (() -> result)) :: result when result: var
+  def with_locale(assembly, locale, fun) do
+    previous_locale = Process.get(assembly)
+    Fluent.Assembly.put_locale(assembly, locale)
 
     try do
       fun.()
     after
       if previous_locale do
-        Gettext.put_locale(backend, previous_locale)
+        Fluent.Assembly.put_locale(assembly, previous_locale)
       else
-        Process.delete(backend)
+        Process.delete(assembly)
       end
     end
   end
 
   @doc """
-  Returns all the locales for which PO files exist for the given `backend`.
-  If the translations directory for the given backend doesn't exist, then an
+  Returns all the locales for which PO files exist for the given `assembly`.
+  If the translations directory for the given assembly doesn't exist, then an
   empty list is returned.
   ## Examples
-  With the following backend:
-      defmodule MyApp.Gettext do
-        use Gettext, otp_app: :my_app
+  With the following assembly:
+      defmodule MyApp.Fluent.Assembly do
+        use Fluent.Assembly, otp_app: :my_app
       end
   and the following translations directory:
-      my_app/priv/gettext
+      my_app/priv/Fluent.Assembly
       ├─ en
       ├─ it
       └─ pt_BR
   then:
-      Gettext.known_locales(MyApp.Gettext)
+      Fluent.Assembly.known_locales(MyApp.Fluent)
       #=> ["en", "it", "pt_BR"]
   """
-  @spec known_locales(backend) :: [locale]
-  def known_locales(backend) do
-    backend.__gettext__(:known_locales)
+  @spec known_locales(assembly) :: [locale]
+  def known_locales(assembly) do
+    assembly.__fluent__(:known_locales)
   end
 end

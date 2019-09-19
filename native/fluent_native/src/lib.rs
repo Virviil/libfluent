@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate rustler;
 
-use rustler::{Encoder, Env, Error, Term};
+use rustler::{Encoder, Env, Error, Term, TermType};
 use rustler::ResourceArc;
 use std::sync::RwLock;
 
@@ -82,10 +82,23 @@ fn with_resource<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error>
 fn format_pattern<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
     let container: ResourceArc<Container> = args[0].decode()?;
     let msg_id: String = args[1].decode()?;
-    let arg_ids: Vec<(rustler::types::Atom, String)> = args[2].decode()?;
+    let arg_ids: Vec<(rustler::types::Atom, Term)> = args[2].decode()?;
 
     // Reconfiguring args
-    let arg_ids: Vec<(String, String)> = arg_ids.into_iter().map(|(key, value)| {
+    let arg_ids: Vec<(String, FluentValue)> = arg_ids.into_iter().map(|(key, value)| {
+        let fluent_value: FluentValue = match &value.get_type() {
+            TermType::Binary => {
+                match value.decode::<String>() {
+                    Ok(value) => FluentValue::from(value),
+                    Err(_e) => panic!("Mismatched types")
+                }
+            },
+            TermType::Number => {
+                FluentValue::from(
+                    value.decode::<f64>().unwrap_or(value.decode::<i64>()?)
+                )
+            }
+        };
         (format!("{:?}", key), value)
     }).collect();
 

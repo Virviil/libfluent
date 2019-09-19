@@ -1,8 +1,5 @@
 defmodule Fluent.Native do
-  use Rustler, otp_app: :fluent, crate: :fluent_native
-
-  def open(_options), do: error()
-  def read_until(_resource, _byte), do: error()
+  use Rustler, otp_app: :libfluent, crate: :fluent_native
 
   def init(_locale), do: error()
   def with_resource(_bundle, _resource), do: error()
