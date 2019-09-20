@@ -89,17 +89,24 @@ fn format_pattern<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error
         let fluent_value: FluentValue = match &value.get_type() {
             TermType::Binary => {
                 match value.decode::<String>() {
-                    Ok(value) => FluentValue::from(value),
+                    Ok(string) => FluentValue::from(string),
                     Err(_e) => panic!("Mismatched types")
                 }
             },
             TermType::Number => {
-                FluentValue::from(
-                    value.decode::<f64>().unwrap_or(value.decode::<i64>()?)
-                )
+                match value.decode::<f64>() {
+                    Ok(float) => FluentValue::from(float),
+                    Err(_e) => {
+                        match value.decode::<i64>() {
+                            Ok(integer) => FluentValue::from(integer),
+                            Err(_e) => panic!("Mismatched types")
+                        }
+                    }
+                }
             }
+            _ => panic!("Mismatched types") // TODO: Add error handling
         };
-        (format!("{:?}", key), value)
+        (format!("{:?}", key), fluent_value)
     }).collect();
 
     // Locking bundle to write
@@ -114,7 +121,7 @@ fn format_pattern<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error
     // Getting args
     let mut args = FluentArgs::new();
     for (key, value) in &arg_ids {
-        args.insert(&key, FluentValue::from(value.to_string()));
+        args.insert(key, value.clone());
     }
 
     // Getting errors

@@ -33,7 +33,8 @@ defmodule Fluent.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:rustler, "~> 0.21.0"}
+      {:rustler, "~> 0.21.0"},
+      {:mix_test_watch, "~> 0.8", only: :dev, runtime: false}
     ]
   end
 end

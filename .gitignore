@@ -24,3 +24,5 @@ fluent-*.tar
 
 # Rustler artifacts
 priv/native
+
+.elixir_ls
