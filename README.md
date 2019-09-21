@@ -1,4 +1,4 @@
-# Fluent
+# LibFluent
 
 **TODO: Add description**
 
@@ -10,12 +10,11 @@ by adding `fluent` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:fluent, "~> 0.1.0"}
+    {:libfluent, "~> 0.1.0"}
   ]
 end
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/fluent](https://hexdocs.pm/fluent).
-
+be found at [https://hexdocs.pm/fluent](https://hexdocs.pm/libfluent).

@@ -2,6 +2,7 @@ defmodule Fluent.Assembly do
   defmacro __using__(opts) do
     quote location: :keep do
       def t(message, args) do
+        assembly = Fluent.Assembly.get_locale(__MODULE__)
 
       end
     end
