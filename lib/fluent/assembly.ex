@@ -1,9 +1,27 @@
 defmodule Fluent.Assembly do
+  @doc """
+  Doc for using macro
+
+  opts:
+
+  * otp_app: "libfluen"
+  * priv: "priv/fluent"
+  * default_locale: "en-US"
+  """
   defmacro __using__(opts) do
     quote location: :keep do
-      def t(message, args) do
-        assembly = Fluent.Assembly.get_locale(__MODULE__)
+      @otp_app Keyword.fetch!(unquote(opts), :otp_app)
+      @priv Keyword.get(unquote(opts), :priv, "fluent")
+      @default_locale Keyword.get(unquote(opts), :default_locale, "en_US")
 
+      def t(message, args \\ []) do
+        locale = Fluent.Assembly.get_locale(__MODULE__)
+      end
+
+
+      defp format_pattern(language, message, args) do
+        bundle = retrieve_bundle_for_locale(language)
+        Fluent.Native.format_pattern(bundle, message, args)
       end
     end
   end
