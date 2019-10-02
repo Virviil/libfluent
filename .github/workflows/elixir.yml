@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: elixir:1.9.1-slim
+      image: xtianw/rustler:rust1.37.0-elixir1.9.1
 
     steps:
     - uses: actions/checkout@v1
