@@ -37,6 +37,7 @@ rustler::rustler_export_nifs! {
         ("init", 1, init),
         ("with_resource", 2, with_resource),
         ("format_pattern", 3, format_pattern),
+        ("assert_locale", 1, assert_locale),
     ],
     Some(on_init)
 }
@@ -136,4 +137,13 @@ fn format_pattern<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error
     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
 
     Ok((atoms::ok(), value.into_owned()).encode(env))
+}
+
+fn assert_locale<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
+    let lang: String = args[0].decode()?;
+    // Getting language
+    match lang.parse::<LanguageIdentifier>() {
+        Ok(lang_id) => Ok((atoms::ok(), &lang_id.to_string()).encode(env)),
+        Err(_e) => Ok((atoms::error(), (atoms::bad_locale(), lang)).encode(env))
+    }
 }

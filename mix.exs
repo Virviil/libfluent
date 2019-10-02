@@ -24,7 +24,7 @@ defmodule Fluent.MixProject do
 
   def description() do
     """
-    I10n and L18n Project Fluent implimentation for Elixir.
+    I18n and L10n Project Fluent implimentation for Elixir.
     """
   end
 
