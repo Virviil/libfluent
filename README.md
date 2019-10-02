@@ -1,6 +1,6 @@
-# LibFluent
+# libfluent
 
-**TODO: Add description**
+Native bindings to Rust Project Fluent library
 
 ## Installation
 
