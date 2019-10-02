@@ -33,7 +33,7 @@ defmodule Fluent.Assembly do
         locale = Fluent.Assembly.get_locale(__MODULE__)
         case Fluent.Store.format_pattern(__store__(), locale, message, args) do
           {:ok, message} -> message
-          _ -> case @silent_errors do
+          _ -> case __config__(:silent_errors) do
             true -> message
             false -> raise(
               Fluent.MessageNotFound,
