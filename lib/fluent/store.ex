@@ -3,6 +3,8 @@ defmodule Fluent.Store do
   This module hande references to active bundles, that are using during runtimne
   of the program
   """
+  alias Fluent.Assembly.Source
+
   @behaviour Access
   defstruct bundles: %{}
 
@@ -21,7 +23,6 @@ defmodule Fluent.Store do
   @impl Access
   defdelegate pop(data, key), to: Map
 
-
   #############################################################################
   ### Initialization tree
   #############################################################################
@@ -37,8 +38,9 @@ defmodule Fluent.Store do
   @spec initialize_store(assembly :: Fluent.Assembly.t()) :: {:ok, t()}
   def initialize_store(assembly) do
     assembly
-    |> Fluent.Assembly.Source.locales()
+    |> Source.locales()
     |> Enum.each(&initialize_locale(assembly, &1))
+
     :persistent_term.get(assembly)
   end
 
@@ -48,7 +50,8 @@ defmodule Fluent.Store do
 
   iex> Fluent.Store.initialize_bundle(MyApp.Fluent, "en-US")
   """
-  @spec initialize_locale(assembly :: Fluent.Assembly.t(), locale :: Fluent.locale()) :: {:ok, Fluent.bundle()}
+  @spec initialize_locale(assembly :: Fluent.Assembly.t(), locale :: Fluent.locale()) ::
+          {:ok, Fluent.bundle()}
   def initialize_locale(assembly, locale) do
     with {:ok, bundle_ref} when is_reference(bundle_ref) <- Fluent.Native.init(locale),
          :ok <- persist_bundle(assembly, locale, bundle_ref),
@@ -70,10 +73,14 @@ defmodule Fluent.Store do
     Map.keys(store[:bundles])
   end
 
-  @spec add_resources(bundle_reference :: Fluent.bundle(), assembly :: Fluent.Assembly.t(), locale :: Fluent.locale()) :: :ok
+  @spec add_resources(
+          bundle_reference :: Fluent.bundle(),
+          assembly :: Fluent.Assembly.t(),
+          locale :: Fluent.locale()
+        ) :: :ok
   defp add_resources(bundle_reference, assembly, locale) do
     assembly
-    |> Fluent.Assembly.Source.ftl_files_pathes(locale)
+    |> Source.ftl_files_pathes(locale)
     |> Enum.each(fn path ->
       case File.read(path) do
         {:ok, raw_data} -> Fluent.Native.with_resource(bundle_reference, raw_data)
@@ -89,11 +96,12 @@ defmodule Fluent.Store do
           bundle_reference :: reference()
         ) :: any
   defp persist_bundle(assembly, locale, bundle_reference) do
-    store = put_in(
-      :persistent_term.get(assembly, %__MODULE__{}),
-      [:bundles, locale],
-      bundle_reference
-    )
+    store =
+      put_in(
+        :persistent_term.get(assembly, %__MODULE__{}),
+        [:bundles, locale],
+        bundle_reference
+      )
 
     case :persistent_term.put(assembly, store) do
       :ok -> :ok
