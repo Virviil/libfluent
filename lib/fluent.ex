@@ -1,4 +1,8 @@
 defmodule Fluent do
+  @moduledoc """
+  Module
+  """
+
   @typedoc """
   Represents locale. Basically it's a string, that has valid locale identifier
   """

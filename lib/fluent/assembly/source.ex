@@ -1,4 +1,8 @@
 defmodule Fluent.Assembly.Source do
+  @moduledoc """
+  Module
+  """
+
   @doc """
   Returns absolute path to directory, which contains all FTL data for `assembly`.
 

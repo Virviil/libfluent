@@ -1,4 +1,7 @@
 defmodule Fluent.Native do
+  @moduledoc """
+  Module
+  """
   use Rustler, otp_app: :libfluent, crate: :fluent_native
 
   @doc """

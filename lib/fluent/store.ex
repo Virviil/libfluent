@@ -77,7 +77,7 @@ defmodule Fluent.Store do
     |> Enum.each(fn path ->
       case File.read(path) do
         {:ok, raw_data} -> Fluent.Native.with_resource(bundle_reference, raw_data)
-        # TODO: Check if need to handle these issues
+        # May be here is needed to handle errors
         {:error, _} -> :skip_this_file
       end
     end)

@@ -1,4 +1,7 @@
 defmodule Fluent.Assembly do
+  @moduledoc """
+  Module
+  """
   @type t :: atom()
 
   @doc """
