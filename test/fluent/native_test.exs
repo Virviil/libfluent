@@ -19,9 +19,9 @@ defmodule Fluent.NativeTest do
       end
     end
 
-    # test "it adds valid resource", %{bundle: bundle} do
-    #   assert :ok = Fluent.Native.with_resource(bundle, "a = A")
-    # end
+    test "it adds valid resource", %{bundle: bundle} do
+      assert :ok = Fluent.Native.with_resource(bundle, "a = A")
+    end
 
     test "it fails with bad resource", %{bundle: bundle} do
       assert {:error, :bad_resource} = Fluent.Native.with_resource(bundle, "bad resource")
