@@ -15,7 +15,14 @@ defmodule Fluent.MixProject do
       rustler_crates: rustler_crates(),
       package: package(),
       description: description(),
-      compilers: [:rustler] ++ Mix.compilers
+      compilers: [:rustler] ++ Mix.compilers,
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -44,6 +51,8 @@ defmodule Fluent.MixProject do
       {:rustler, "~> 0.21.0"},
       {:mix_test_watch, "~> 0.8", only: :dev, runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev},
+      {:excoveralls, "~> 0.11", only: :test},
+      {:credo, "~> 1.1", only: [:dev, :test], runtime: false}
     ]
   end
 

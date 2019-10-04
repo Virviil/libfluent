@@ -26,10 +26,10 @@ defmodule Fluent.Native do
       iex> with_resource(bundle, "key = Translation")
       :ok
   """
-  @spec with_resource(bundle :: Fluent.bundle(), resource :: String.t()) :: :ok | no_return()
+  @spec with_resource(bundle :: Fluent.bundle(), resource :: String.t()) :: :ok | {:error, :bad_resource} | no_return()
   def with_resource(_bundle, _resource), do: error()
 
-  @spec format_pattern(bundle :: Fluent.bundle(), message :: String.t(), args :: Keyword.t()) :: {:ok, String.t()} | {:error, any} | no_return()
+  @spec format_pattern(bundle :: Fluent.bundle(), message :: String.t(), args :: Keyword.t()) :: {:ok, String.t()} | {:error, :bad_msg} | no_return()
   def format_pattern(_bundle, _message, _args), do: error()
 
   @spec assert_locale(locale :: Fluent.locale()) :: :ok | {:error, any} | no_return

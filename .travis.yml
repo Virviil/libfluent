@@ -1,0 +1,15 @@
+language: elixir
+
+elixir:
+  - 1.9
+
+otp_release:
+  - 22.1
+
+env:
+  - MIX_ENV=test
+
+script:
+  - mix compile --warnings-as-errors 
+  - mix credo --strict
+  - mix coveralls.travis
