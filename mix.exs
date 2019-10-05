@@ -13,10 +13,12 @@ defmodule Fluent.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       rustler_crates: rustler_crates(),
+      elixirc_paths: elixirc_paths(Mix.env()),
       package: package(),
       description: description(),
       compilers: [:rustler] ++ Mix.compilers,
       test_coverage: [tool: ExCoveralls],
+      docs: docs(),
       preferred_cli_env: [
         coveralls: :test,
         "coveralls.detail": :test,
@@ -45,6 +47,9 @@ defmodule Fluent.MixProject do
   defp rustc_mode(:prod), do: :release
   defp rustc_mode(_), do: :debug
 
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
@@ -53,6 +58,16 @@ defmodule Fluent.MixProject do
       {:ex_doc, ">= 0.0.0", only: :dev},
       {:excoveralls, "~> 0.11", only: :test},
       {:credo, "~> 1.1", only: [:dev, :test], runtime: false}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      logo: "extras/logo.png",
+      extras: [
+        "README.md"
+      ]
     ]
   end
 
