@@ -10,5 +10,5 @@ end
 
 defmodule Assembly.DefaultLanguageChanged do
   @moduledoc false
-  use Fluent.Assembly, otp_app: :libfluent, priv: "another-priv-folder"
+  use Fluent.Assembly, otp_app: :libfluent, default_locale: "es"
 end
