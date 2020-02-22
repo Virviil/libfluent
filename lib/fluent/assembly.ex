@@ -12,6 +12,7 @@ defmodule Fluent.Assembly do
   * otp_app: "libfluen"
   * priv: "priv/fluent"
   * default_locale: "en-US"
+  * use_isolating: false - default is true
   """
   defmacro __using__(opts) do
     quote location: :keep do
@@ -19,6 +20,7 @@ defmodule Fluent.Assembly do
       @priv Keyword.get(unquote(opts), :priv, "fluent")
       @default_locale Keyword.get(unquote(opts), :default_locale, "en")
       @silent_errors Keyword.get(unquote(opts), :silent_errors, false)
+      @use_isolating Keyword.get(unquote(opts), :use_isolating, true)
 
       @spec __config__(atom()) :: any()
       def __config__(:otp_app), do: @otp_app
@@ -26,6 +28,7 @@ defmodule Fluent.Assembly do
       def __config__(:priv), do: Keyword.get(__config__(:sys), :priv, nil) || @priv
       def __config__(:default_locale), do: Keyword.get(__config__(:sys), :default_locale, nil) || @default_locale
       def __config__(:silent_errors), do: Keyword.get(__config__(:sys), :silent_errors, nil) || @silent_errors
+      def __config__(:use_isolating), do: Keyword.get(__config__(:sys), :use_isolating, nil) || @use_isolating
 
       @spec __store__() :: Fluent.Store.t()
       def __store__ do

@@ -19,6 +19,8 @@ mod atoms {
         atom bad_resource;
         atom bad_msg;
         atom no_value;
+
+        atom use_isolating;
     }
 }
 
@@ -34,7 +36,7 @@ fn on_init<'a>(env: Env<'a>, _load_info: Term<'a>) -> bool {
 rustler::rustler_export_nifs! {
     "Elixir.Fluent.Native",
     [
-        ("init", 1, init),
+        ("init", 2, init),
         ("with_resource", 2, with_resource),
         ("format_pattern", 3, format_pattern),
         ("assert_locale", 1, assert_locale),
@@ -44,13 +46,22 @@ rustler::rustler_export_nifs! {
 
 fn init<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
     let lang: String = args[0].decode()?;
+    let bundle_init_keyword: Vec<(rustler::types::Atom, Term)> = args[1].decode()?;
     // Getting language
     let lang_id = match lang.parse::<LanguageIdentifier>() {
         Ok(lang_id) => lang_id,
         Err(_e) => return Ok((atoms::error(), (atoms::bad_locale(), lang)).encode(env))
     };
     // Initializing bundle
-    let bundle = FluentBundle::new(&[lang_id]);
+    let mut bundle = FluentBundle::new(&[lang_id]);
+    
+    // Setting different configs and flags
+    for (key, value) in bundle_init_keyword {
+        if key == atoms::use_isolating() {
+            let use_isolating_value: bool = value.decode()?;
+            bundle.set_use_isolating(use_isolating_value);
+        }
+    }
     let bundle = Container {
         data: RwLock::new(bundle),
     };

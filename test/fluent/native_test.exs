@@ -32,5 +32,26 @@ defmodule Fluent.NativeTest do
       Fluent.Native.with_resource(bundle, "a = A")
       assert {:ok, "A"} = Fluent.Native.format_pattern(bundle, "a", [])
     end
+
+    test "it uses isolation by default", %{bundle: bundle} do
+      assert {:error, :bad_msg} = Fluent.Native.format_pattern(bundle, "a", [])
+      Fluent.Native.with_resource(bundle, "hello-user = Hello, {$userName}!")
+      assert {:ok, "Hello, \u2068Test User\u2069!"}= Fluent.Native.format_pattern(bundle, "hello-user", [userName: "Test User"])
+    end
+  end
+
+  describe "without isolation" do
+    setup do
+      case Fluent.Native.init("en", use_isolating: false) do
+        {:ok, reference} -> %{bundle: reference}
+        _ -> :error
+      end
+    end
+
+    test "it uses no isolation", %{bundle: bundle} do
+      assert {:error, :bad_msg} = Fluent.Native.format_pattern(bundle, "a", [])
+      Fluent.Native.with_resource(bundle, "hello-user = Hello, {$userName}!")
+      assert {:ok, "Hello, Test User!"}= Fluent.Native.format_pattern(bundle, "hello-user", [userName: "Test User"])
+    end
   end
 end

@@ -7,13 +7,18 @@ defmodule Fluent.Native do
   @doc """
   Initializes Fluent native bundle for given `locale`, and returns reference to it on succeded initialization.
 
+  Available options:
+
+  * `use_isolating` - if set to **false**, removes isolation for messages. Can be used in specific environments to prevent unnesessary identation.
+    Must be set to **true** in for right-to-left locale usages.
+
   ## Examples:
 
       iex> init("en")
       {:ok, #Reference<...>}
   """
-  @spec init(locale :: Fluent.locale()) :: {:ok, Fluent.bundle()} | no_return()
-  def init(_locale), do: error()
+  @spec init(locale :: Fluent.locale(), opts :: Keyword.t()) :: {:ok, Fluent.bundle()} | no_return()
+  def init(_locale, _opts \\ []), do: error()
 
   @doc """
   Adds new FTL `resource` for existing `bundle`.
@@ -32,6 +37,12 @@ defmodule Fluent.Native do
   @spec with_resource(bundle :: Fluent.bundle(), resource :: String.t()) :: :ok | {:error, :bad_resource} | no_return()
   def with_resource(_bundle, _resource), do: error()
 
+  @doc """
+  Performs localization for given `message` with given `bundle`.
+
+  Returns `ok` tuple if message is succeeded
+  Potentially can crash in the `bundle that is given not match.
+  """
   @spec format_pattern(bundle :: Fluent.bundle(), message :: String.t(), args :: Keyword.t()) :: {:ok, String.t()} | {:error, :bad_msg} | no_return()
   def format_pattern(_bundle, _message, _args), do: error()
 
