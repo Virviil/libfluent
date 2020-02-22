@@ -26,9 +26,15 @@ defmodule Fluent.Assembly do
       def __config__(:otp_app), do: @otp_app
       def __config__(:sys), do: Application.get_env(@otp_app, __MODULE__, [])
       def __config__(:priv), do: Keyword.get(__config__(:sys), :priv, nil) || @priv
-      def __config__(:default_locale), do: Keyword.get(__config__(:sys), :default_locale, nil) || @default_locale
-      def __config__(:silent_errors), do: Keyword.get(__config__(:sys), :silent_errors, nil) || @silent_errors
-      def __config__(:use_isolating), do: Keyword.get(__config__(:sys), :use_isolating, nil) || @use_isolating
+
+      def __config__(:default_locale),
+        do: Keyword.get(__config__(:sys), :default_locale, nil) || @default_locale
+
+      def __config__(:silent_errors),
+        do: Keyword.get(__config__(:sys), :silent_errors, nil) || @silent_errors
+
+      def __config__(:use_isolating),
+        do: Keyword.get(__config__(:sys), :use_isolating, nil) || @use_isolating
 
       @spec __store__() :: Fluent.Store.t()
       def __store__ do
@@ -37,17 +43,24 @@ defmodule Fluent.Assembly do
 
       def ftl(message, args \\ []) do
         locale = Fluent.get_locale(__MODULE__)
+
         case Fluent.Store.format_pattern(__store__(), locale, message, args) do
-          {:ok, message} -> message
-          _ -> case __config__(:silent_errors) do
-            true -> message
-            false -> raise(
-              Fluent.MessageNotFound,
-              msg: message,
-              locale: locale,
-              assembly: __MODULE__
-            )
-          end
+          {:ok, message} ->
+            message
+
+          _ ->
+            case __config__(:silent_errors) do
+              true ->
+                message
+
+              false ->
+                raise(
+                  Fluent.MessageNotFound,
+                  msg: message,
+                  locale: locale,
+                  assembly: __MODULE__
+                )
+            end
         end
       end
     end

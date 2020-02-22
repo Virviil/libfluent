@@ -16,7 +16,7 @@ defmodule Fluent.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       package: package(),
       description: description(),
-      compilers: [:rustler] ++ Mix.compilers,
+      compilers: [:rustler] ++ Mix.compilers(),
       test_coverage: [tool: ExCoveralls],
       docs: docs(),
       preferred_cli_env: [
@@ -38,10 +38,12 @@ defmodule Fluent.MixProject do
   end
 
   defp rustler_crates() do
-    [fluent_native: [
-      path: "native/fluent_native",
-      mode: rustc_mode(Mix.env)
-    ]]
+    [
+      fluent_native: [
+        path: "native/fluent_native",
+        mode: rustc_mode(Mix.env())
+      ]
+    ]
   end
 
   defp rustc_mode(:prod), do: :release

@@ -17,7 +17,8 @@ defmodule Fluent.Native do
       iex> init("en")
       {:ok, #Reference<...>}
   """
-  @spec init(locale :: Fluent.locale(), opts :: Keyword.t()) :: {:ok, Fluent.bundle()} | no_return()
+  @spec init(locale :: Fluent.locale(), opts :: Keyword.t()) ::
+          {:ok, Fluent.bundle()} | no_return()
   def init(_locale, _opts \\ []), do: error()
 
   @doc """
@@ -34,7 +35,8 @@ defmodule Fluent.Native do
       iex> with_resource(bundle, "key = Translation")
       :ok
   """
-  @spec with_resource(bundle :: Fluent.bundle(), resource :: String.t()) :: :ok | {:error, :bad_resource} | no_return()
+  @spec with_resource(bundle :: Fluent.bundle(), resource :: String.t()) ::
+          :ok | {:error, :bad_resource} | no_return()
   def with_resource(_bundle, _resource), do: error()
 
   @doc """
@@ -43,7 +45,8 @@ defmodule Fluent.Native do
   Returns `ok` tuple if message is succeeded
   Potentially can crash in the `bundle` that is given not match.
   """
-  @spec format_pattern(bundle :: Fluent.bundle(), message :: String.t(), args :: Keyword.t()) :: {:ok, String.t()} | {:error, :bad_msg} | no_return()
+  @spec format_pattern(bundle :: Fluent.bundle(), message :: String.t(), args :: Keyword.t()) ::
+          {:ok, String.t()} | {:error, :bad_msg} | no_return()
   def format_pattern(_bundle, _message, _args), do: error()
 
   @spec assert_locale(locale :: Fluent.locale()) :: :ok | {:error, any} | no_return

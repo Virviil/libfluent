@@ -7,7 +7,8 @@ defmodule Fluent.NativeTest do
     end
 
     test "it fails with init for invalid locale" do
-      assert {:error, {:bad_locale, "this-is-wrong-locale"}} = Fluent.Native.init("this-is-wrong-locale")
+      assert {:error, {:bad_locale, "this-is-wrong-locale"}} =
+               Fluent.Native.init("this-is-wrong-locale")
     end
   end
 
@@ -36,7 +37,9 @@ defmodule Fluent.NativeTest do
     test "it uses isolation by default", %{bundle: bundle} do
       assert {:error, :bad_msg} = Fluent.Native.format_pattern(bundle, "a", [])
       Fluent.Native.with_resource(bundle, "hello-user = Hello, {$userName}!")
-      assert {:ok, "Hello, \u2068Test User\u2069!"}= Fluent.Native.format_pattern(bundle, "hello-user", [userName: "Test User"])
+
+      assert {:ok, "Hello, \u2068Test User\u2069!"} =
+               Fluent.Native.format_pattern(bundle, "hello-user", userName: "Test User")
     end
   end
 
@@ -51,7 +54,9 @@ defmodule Fluent.NativeTest do
     test "it uses no isolation", %{bundle: bundle} do
       assert {:error, :bad_msg} = Fluent.Native.format_pattern(bundle, "a", [])
       Fluent.Native.with_resource(bundle, "hello-user = Hello, {$userName}!")
-      assert {:ok, "Hello, Test User!"}= Fluent.Native.format_pattern(bundle, "hello-user", [userName: "Test User"])
+
+      assert {:ok, "Hello, Test User!"} =
+               Fluent.Native.format_pattern(bundle, "hello-user", userName: "Test User")
     end
   end
 end

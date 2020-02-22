@@ -7,11 +7,11 @@ defmodule FluentTest do
       assert "en-US" = Process.get(Fluent)
     end
 
-     test "it rises if the locale is not binary" do
-       assert_raise ArgumentError, fn ->
+    test "it rises if the locale is not binary" do
+      assert_raise ArgumentError, fn ->
         Fluent.put_locale(1234)
-       end
-     end
+      end
+    end
   end
 
   describe "get_locale" do

@@ -53,7 +53,8 @@ defmodule Fluent.Store do
   @spec initialize_locale(assembly :: Fluent.Assembly.t(), locale :: Fluent.locale()) ::
           {:ok, Fluent.bundle()}
   def initialize_locale(assembly, locale) do
-    with {:ok, bundle_ref} when is_reference(bundle_ref) <- Fluent.Native.init(locale, use_isolating: assembly.__config__(:use_isolating)),
+    with {:ok, bundle_ref} when is_reference(bundle_ref) <-
+           Fluent.Native.init(locale, use_isolating: assembly.__config__(:use_isolating)),
          :ok <- persist_bundle(assembly, locale, bundle_ref),
          :ok <- add_resources(bundle_ref, assembly, locale) do
       {:ok, bundle_ref}
