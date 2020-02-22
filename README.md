@@ -119,7 +119,7 @@ by adding `fluent` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:libfluent, "~> 0.1.0"}
+    {:libfluent, "~> 0.2.1"}
   ]
 end
 ```

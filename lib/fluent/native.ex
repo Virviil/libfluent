@@ -41,7 +41,7 @@ defmodule Fluent.Native do
   Performs localization for given `message` with given `bundle`.
 
   Returns `ok` tuple if message is succeeded
-  Potentially can crash in the `bundle that is given not match.
+  Potentially can crash in the `bundle` that is given not match.
   """
   @spec format_pattern(bundle :: Fluent.bundle(), message :: String.t(), args :: Keyword.t()) :: {:ok, String.t()} | {:error, :bad_msg} | no_return()
   def format_pattern(_bundle, _message, _args), do: error()

@@ -12,5 +12,5 @@ crate-type = ["dylib"]
 [dependencies]
 rustler = "0.21.0"
 lazy_static = "1.0"
-fluent = "0.7.1"
-unic-langid = "0.4.1"
+fluent = "0.10.2"
+unic-langid = "0.8.0"
