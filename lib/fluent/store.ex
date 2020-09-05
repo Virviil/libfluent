@@ -95,7 +95,7 @@ defmodule Fluent.Store do
           assembly :: Fluent.Assembly.t(),
           locale :: Fluent.locale(),
           bundle_reference :: reference()
-        ) :: any
+        ) :: :ok
   defp persist_bundle(assembly, locale, bundle_reference) do
     store =
       put_in(
@@ -103,10 +103,6 @@ defmodule Fluent.Store do
         [:bundles, locale],
         bundle_reference
       )
-
-    case :persistent_term.put(assembly, store) do
-      :ok -> :ok
-      _ -> {:error, :reference_persistence}
-    end
+    :persistent_term.put(assembly, store)
   end
 end
