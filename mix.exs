@@ -2,7 +2,7 @@ defmodule Fluent.MixProject do
   use Mix.Project
 
   @app :libfluent
-  @version "0.2.1"
+  @version "0.2.2"
   @native_app :fluent_native
 
   def project do
@@ -56,10 +56,10 @@ defmodule Fluent.MixProject do
   defp deps do
     [
       {:rustler, "~> 0.21.0"},
-      {:mix_test_watch, "~> 0.8", only: :dev, runtime: false},
+      {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev},
-      {:excoveralls, "~> 0.11", only: :test},
-      {:credo, "~> 1.1", only: [:dev, :test], runtime: false}
+      {:excoveralls, "~> 0.13", only: :test},
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 

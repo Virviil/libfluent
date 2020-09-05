@@ -19,7 +19,7 @@ defmodule FluentTest do
       assert Fluent.get_locale(Assembly.Empty) == "en"
     end
 
-    test "it get overrided Floent Assembly default locale" do
+    test "it get overrided Fluent Assembly default locale" do
       assert Fluent.get_locale(Assembly.DefaultLanguageChanged) == "es"
     end
 
