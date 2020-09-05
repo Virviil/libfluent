@@ -80,7 +80,7 @@ At runtime, all translation functions that do not explicitly take a locale as an
 
 `Fluent.put_locale/1` can be used to change the locale of all assemblies for the current Elixir process. That's the preferred mechanism for setting the locale at runtime. `Fluent.put_locale/2` can be used when you want to set the locale of one specific **Fluent** assembly without affecting other **Fluent** assemblies.
 
-Similarly, `Fluent.get_locale/0` gets the locale for all assemblies in the current process. Gettext.get_locale/1 gets the locale of a specific assembly for the current process. Check their documentation for more information.
+Similarly, `Fluent.get_locale/0` gets the locale for all assemblies in the current process. `Fluent.get_locale/1` gets the locale of a specific assembly for the current process. Check their documentation for more information.
 
 Locales are expressed as strings (like "en" or "fr"); they can be arbitrary strings as long as they match a directory name. As mentioned above, the locale is stored per-process (in the process dictionary): this means that the locale must be set in every new process in order to have the right locale available for that process. Pay attention to this behaviour, since not setting the locale will not result in any errors when `Fluent.get_locale/0` or `Fluent.get_locale/1` are called; the default locale will be returned instead.
 
@@ -119,7 +119,7 @@ by adding `fluent` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:libfluent, "~> 0.2.1"}
+    {:libfluent, "~> 0.2.2"}
   ]
 end
 ```
