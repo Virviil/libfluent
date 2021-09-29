@@ -1,4 +1,3 @@
-#[macro_use]
 extern crate rustler;
 
 use rustler::{Encoder, Env, Error, Term, TermType};
@@ -9,44 +8,30 @@ use fluent::{FluentBundle, FluentValue, FluentResource, FluentArgs};
 use unic_langid::LanguageIdentifier;
 
 mod atoms {
-    rustler_atoms! {
-        atom ok;
-        atom error;
-        //atom __true__ = "true";
-        //atom __false__ = "false";
+    rustler::atoms! {
+        ok,
+        error,
 
-        atom bad_locale;
-        atom bad_resource;
-        atom bad_msg;
-        atom no_value;
+        bad_locale,
+        bad_resource,
+        bad_msg,
+        no_value,
 
-        atom use_isolating;
+        use_isolating,
     }
 }
 
 struct Container {
-	data: RwLock<FluentBundle<FluentResource>>,
+    data: RwLock<FluentBundle<FluentResource>>,
 }
 
 fn on_init<'a>(env: Env<'a>, _load_info: Term<'a>) -> bool {
-    resource_struct_init!(Container, env);
+    rustler::resource!(Container, env);
     true
 }
 
-rustler::rustler_export_nifs! {
-    "Elixir.Fluent.Native",
-    [
-        ("init", 2, init),
-        ("with_resource", 2, with_resource),
-        ("format_pattern", 3, format_pattern),
-        ("assert_locale", 1, assert_locale),
-    ],
-    Some(on_init)
-}
-
-fn init<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
-    let lang: String = args[0].decode()?;
-    let bundle_init_keyword: Vec<(rustler::types::Atom, Term)> = args[1].decode()?;
+#[rustler::nif]
+fn init<'a>(env: Env<'a>, lang: String, bundle_init_keyword: Vec<(rustler::types::Atom, Term)>) -> Result<Term<'a>, Error> {
     // Getting language
     let lang_id = match lang.parse::<LanguageIdentifier>() {
         Ok(lang_id) => lang_id,
@@ -69,10 +54,8 @@ fn init<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
     Ok((atoms::ok(), ResourceArc::new(bundle)).encode(env))
 }
 
-fn with_resource<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
-    let container: ResourceArc<Container> = args[0].decode()?;
-    let source: String = args[1].decode()?;
-
+#[rustler::nif]
+fn with_resource<'a>(env: Env<'a>, container: ResourceArc<Container>, source: String) -> Result<Term<'a>, Error> {
     // Initializing resource
     let resource = match FluentResource::try_new(source) {
         Ok(resource) => resource,
@@ -91,11 +74,13 @@ fn with_resource<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error>
     }
 }
 
-fn format_pattern<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
-    let container: ResourceArc<Container> = args[0].decode()?;
-    let msg_id: String = args[1].decode()?;
-    let arg_ids: Vec<(rustler::types::Atom, Term)> = args[2].decode()?;
-
+#[rustler::nif]
+fn format_pattern<'a>(
+    env: Env<'a>,
+    container: ResourceArc<Container>,
+    msg_id: String,
+    arg_ids: Vec<(rustler::types::Atom, Term)>
+) -> Result<Term<'a>, Error> {
     // Reconfiguring args
     let arg_ids: Vec<(String, FluentValue)> = arg_ids.into_iter().map(|(key, value)| {
         let fluent_value: FluentValue = match &value.get_type() {
@@ -150,11 +135,17 @@ fn format_pattern<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error
     Ok((atoms::ok(), value.into_owned()).encode(env))
 }
 
-fn assert_locale<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
-    let lang: String = args[0].decode()?;
+#[rustler::nif]
+fn assert_locale<'a>(env: Env<'a>, lang: String) -> Result<Term<'a>, Error> {
     // Getting language
     match lang.parse::<LanguageIdentifier>() {
         Ok(lang_id) => Ok((atoms::ok(), &lang_id.to_string()).encode(env)),
         Err(_e) => Ok((atoms::error(), (atoms::bad_locale(), lang)).encode(env))
     }
 }
+
+rustler::init!(
+    "Elixir.Fluent.Native",
+    [init, with_resource, format_pattern, assert_locale],
+    load = on_init
+);
