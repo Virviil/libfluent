@@ -12,11 +12,10 @@ defmodule Fluent.MixProject do
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      rustler_crates: rustler_crates(),
       elixirc_paths: elixirc_paths(Mix.env()),
       package: package(),
       description: description(),
-      compilers: [:rustler] ++ Mix.compilers(),
+      compilers: Mix.compilers(),
       test_coverage: [tool: ExCoveralls],
       docs: docs(),
       preferred_cli_env: [
@@ -37,25 +36,13 @@ defmodule Fluent.MixProject do
     """
   end
 
-  defp rustler_crates() do
-    [
-      fluent_native: [
-        path: "native/fluent_native",
-        mode: rustc_mode(Mix.env())
-      ]
-    ]
-  end
-
-  defp rustc_mode(:prod), do: :release
-  defp rustc_mode(_), do: :debug
-
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:rustler, "~> 0.21.0"},
+      {:rustler, "~> 0.22.0"},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev},
       {:excoveralls, "~> 0.13", only: :test},
