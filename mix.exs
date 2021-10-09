@@ -2,7 +2,7 @@ defmodule Fluent.MixProject do
   use Mix.Project
 
   @app :libfluent
-  @version "0.2.2"
+  @version "0.2.3"
   @native_app :fluent_native
 
   def project do
