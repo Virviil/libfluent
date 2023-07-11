@@ -1,8 +1,8 @@
 [package]
 name = "fluent_native"
-version = "0.2.0"
+version = "0.3.0"
 authors = []
-edition = "2018"
+edition = "2021"
 
 [lib]
 name = "fluent_native"
@@ -10,7 +10,8 @@ path = "src/lib.rs"
 crate-type = ["dylib"]
 
 [dependencies]
-rustler = "0.22.2"
+intl-memoizer = "0.5.1"
+rustler = "0.29.1"
 lazy_static = "1.4.0"
-fluent = "0.10.2"
-unic-langid = "0.8.0"
+fluent = "0.16.0"
+unic-langid = "0.9.1"

@@ -42,11 +42,11 @@ defmodule Fluent.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:rustler, "~> 0.22"},
-      {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
+      {:rustler, "~> 0.29.1"},
+      {:mix_test_watch, "~> 1.1", only: :dev, runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev},
       {:excoveralls, "~> 0.13", only: :test},
-      {:credo, "~> 1.4", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
   end
 
