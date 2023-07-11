@@ -68,7 +68,7 @@ dependencies = [
 
 [[package]]
 name = "fluent_native"
-version = "0.3.0"
+version = "0.2.4"
 dependencies = [
  "fluent",
  "intl-memoizer",
