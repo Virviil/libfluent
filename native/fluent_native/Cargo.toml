@@ -12,6 +12,5 @@ crate-type = ["dylib"]
 [dependencies]
 intl-memoizer = "0.5.1"
 rustler = "0.29.1"
-lazy_static = "1.4.0"
 fluent = "0.16.0"
 unic-langid = "0.9.1"
