@@ -75,7 +75,7 @@ defmodule Fluent do
       MyApp.Fluent.ftl("Hello world")
       #=> "Bonjour monde"
   """
-  @spec with_locale(locale, (() -> result)) :: result when result: var
+  @spec with_locale(locale, (-> result)) :: result when result: var
   def with_locale(locale, fun) do
     previous_locale = Process.get(Fluent)
     Fluent.put_locale(locale)
@@ -110,7 +110,7 @@ defmodule Fluent do
       MyApp.Fluent.ftl("Hello world")
       #=> "Bonjour monde"
   """
-  @spec with_locale(assembly, locale, (() -> result)) :: result when result: var
+  @spec with_locale(assembly, locale, (-> result)) :: result when result: var
   def with_locale(assembly, locale, fun) do
     previous_locale = Process.get(assembly)
     Fluent.put_locale(assembly, locale)

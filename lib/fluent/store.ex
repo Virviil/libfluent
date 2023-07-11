@@ -103,6 +103,7 @@ defmodule Fluent.Store do
         [:bundles, locale],
         bundle_reference
       )
+
     :persistent_term.put(assembly, store)
   end
 end

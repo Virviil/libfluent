@@ -7,7 +7,7 @@ edition = "2021"
 [lib]
 name = "fluent_native"
 path = "src/lib.rs"
-crate-type = ["dylib"]
+crate-type = ["cdylib"]
 
 [dependencies]
 intl-memoizer = "0.5.1"
